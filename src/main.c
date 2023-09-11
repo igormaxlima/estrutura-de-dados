@@ -45,10 +45,11 @@ int main(void)
   inserirFim(&vetor, (Pessoa){.id = 1, .nome = "Ana", .idade = 17, .genero = 'F'});
   inserirFim(&vetor, (Pessoa){2, "Beto", 19, 'M'});
   inserirFim(&vetor, (Pessoa){3, "Caio", 21, 'M'});
-  inserirFim(&vetor, (Pessoa){4, "Dani", 21, 'F'});
+  inserirInicio(&vetor, (Pessoa){4, "Dani", 21, 'F'});
   inserirFim(&vetor, (Pessoa){5, "Fabio", 25, 'M'});
-  inserirFim(&vetor, (Pessoa){6, "leite", 28, 'F'});
-  atualizarPorNome(&vetor, (Pessoa){5, "Fabio", 38, 'M'}, "fabio");
+  inserirFim(&vetor, (Pessoa){6, "Igor", 28, 'F'});
+  atualizarPorNome(&vetor, (Pessoa){5, "Fabio", 38, 'M'}, "Fabio");
+  inserirOrdenadoPorNome(&vetor, (Pessoa){5, "Mabio", 38, 'M'}, "makeabio");
 
   listar(&vetor);
   return 0;
@@ -135,6 +136,27 @@ void inserirOrdenadoPorIdade(Vetor *vetor, Pessoa p, int idade)
 
 void inserirOrdenadoPorNome(Vetor *vetor, Pessoa p, char *nome)
 {
+  int indiceAoSerInserido = 0;
+  int i;
+  for (i = 0; i < vetor->size; i++)
+  {
+    if (strncmp(nome, vetor->pessoas[i].nome, 1) < 0)
+    {
+      indiceAoSerInserido = i;
+      break;
+    }
+    else
+    {
+      indiceAoSerInserido = vetor->size;
+      break;
+    }
+  }
+  for (i = vetor->size; i > indiceAoSerInserido; i--)
+  {
+    vetor->pessoas[i] = vetor->pessoas[i - 1];
+  }
+  vetor->pessoas[indiceAoSerInserido] = p;
+  vetor->size++;
 }
 
 void deletarInicio(Vetor *vetor)
