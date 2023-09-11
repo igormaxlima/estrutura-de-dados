@@ -50,6 +50,7 @@ int main(void)
   inserirFim(&vetor, (Pessoa){6, "Igor", 28, 'F'});
   atualizarPorNome(&vetor, (Pessoa){5, "Fabio", 38, 'M'}, "Fabio");
   inserirOrdenadoPorNome(&vetor, (Pessoa){5, "Mabio", 38, 'M'}, "makeabio");
+  inserirIndice(&vetor, 8, (Pessoa){6, "Brendo", 28, 'F'});
 
   listar(&vetor);
   return 0;
@@ -112,6 +113,7 @@ void inserirIndice(Vetor *vetor, int indice, Pessoa p)
     return;
   }
   vetor->pessoas[indice] = p;
+  vetor->size++;
 }
 
 void inserirOrdenadoPorIdade(Vetor *vetor, Pessoa p, int idade)
