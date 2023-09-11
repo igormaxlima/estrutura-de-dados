@@ -1,3 +1,7 @@
+// Igor Max de Lima Nunes - 2311249 - Eng. Software
+// Brenno de Aguiar Pinheiro Lopes - 2311260 - Eng. Software
+// Pedro Henrique Cabral Jersey - 2311220 - Eng. Software
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,6 +29,7 @@ void zerar(Vetor *vetor);
 void inicializar(Vetor *vetor, int limite);
 void inserirFim(Vetor *vetor, Pessoa p);
 void listar(Vetor *vetor);
+void liberarMemoria(Vetor *vetor);
 
 // Implemente as seguintes funções
 void inserirInicio(Vetor *vetor, Pessoa p);
@@ -45,14 +50,20 @@ int main(void)
   inserirFim(&vetor, (Pessoa){.id = 1, .nome = "Ana", .idade = 17, .genero = 'F'});
   inserirFim(&vetor, (Pessoa){2, "Beto", 19, 'M'});
   inserirFim(&vetor, (Pessoa){3, "Caio", 21, 'M'});
-  inserirInicio(&vetor, (Pessoa){4, "Dani", 21, 'F'});
-  inserirFim(&vetor, (Pessoa){5, "Fabio", 25, 'M'});
-  inserirFim(&vetor, (Pessoa){6, "Igor", 28, 'F'});
-  atualizarPorNome(&vetor, (Pessoa){5, "Fabio", 38, 'M'}, "Fabio");
-  inserirOrdenadoPorNome(&vetor, (Pessoa){5, "Mabio", 38, 'M'}, "makeabio");
-  inserirIndice(&vetor, 8, (Pessoa){6, "Brendo", 28, 'F'});
+  inserirFim(&vetor, (Pessoa){4, "Dani", 21, 'F'});
+  // inserirInicio(&vetor, (Pessoa){5, "Joao", 19, 'M'});
+  // inserirIndice(&vetor, 4, (Pessoa){6, "Messi", 36, 'M'});
+  // inserirOrdenadoPorIdade(&vetor, (Pessoa){7, "Cr7", 38, 'M'}, 38);
+  // inserirOrdenadoPorNome(&vetor, (Pessoa){8, "Neymar", 32, 'M'}, "Neymar");
+  // deletarInicio(&vetor);
+  // deletarFim(&vetor);
+  // deletarIndice(&vetor, 5);
+  // deletarPorNome(&vetor, "Beto");
+  // atualizarIndice(&vetor, 3, (Pessoa){4, "Dani", 25, 'F'});
+  // atualizarPorNome(&vetor, (Pessoa){3, "Caio", 25, 'M'}, "Caio");
 
   listar(&vetor);
+  liberarMemoria(&vetor);
   return 0;
 }
 
@@ -107,10 +118,16 @@ void inserirInicio(Vetor *vetor, Pessoa p)
 void inserirIndice(Vetor *vetor, int indice, Pessoa p)
 {
   // restricao da funcao
-  if (indice < 0 || indice >= vetor->limite)
+  if (indice < 0 || indice > vetor->limite)
   {
     printf("Índice Inválido!\n");
     return;
+  }
+
+  int i;
+  for (i = vetor->size; i > indice; i--)
+  {
+    vetor->pessoas[i] = vetor->pessoas[i - 1];
   }
   vetor->pessoas[indice] = p;
   vetor->size++;
@@ -118,7 +135,7 @@ void inserirIndice(Vetor *vetor, int indice, Pessoa p)
 
 void inserirOrdenadoPorIdade(Vetor *vetor, Pessoa p, int idade)
 {
-  int indiceAoSerInserido = 0;
+  int indiceAoSerInserido = vetor->size;
   int i;
   for (i = 0; i < vetor->size; i++)
   {
@@ -128,17 +145,12 @@ void inserirOrdenadoPorIdade(Vetor *vetor, Pessoa p, int idade)
       break;
     }
   }
-  for (i = vetor->size; i > indiceAoSerInserido; i--)
-  {
-    vetor->pessoas[i] = vetor->pessoas[i - 1];
-  }
-  vetor->pessoas[i] = p;
-  vetor->size++;
+  inserirIndice(vetor, indiceAoSerInserido, p);
 }
 
 void inserirOrdenadoPorNome(Vetor *vetor, Pessoa p, char *nome)
 {
-  int indiceAoSerInserido = 0;
+  int indiceAoSerInserido = vetor->size;
   int i;
   for (i = 0; i < vetor->size; i++)
   {
@@ -147,18 +159,8 @@ void inserirOrdenadoPorNome(Vetor *vetor, Pessoa p, char *nome)
       indiceAoSerInserido = i;
       break;
     }
-    else
-    {
-      indiceAoSerInserido = vetor->size;
-      break;
-    }
   }
-  for (i = vetor->size; i > indiceAoSerInserido; i--)
-  {
-    vetor->pessoas[i] = vetor->pessoas[i - 1];
-  }
-  vetor->pessoas[indiceAoSerInserido] = p;
-  vetor->size++;
+  inserirIndice(vetor, indiceAoSerInserido, p);
 }
 
 void deletarInicio(Vetor *vetor)
@@ -179,7 +181,7 @@ void deletarFim(Vetor *vetor)
 void deletarIndice(Vetor *vetor, int indice)
 {
   // restricao da funcao
-  if (indice < 0 || indice >= vetor->limite)
+  if (indice < 0 || indice >= vetor->limite || indice >= vetor->size)
   {
     printf("Índice Inválido!\n");
     return;
@@ -195,7 +197,7 @@ void deletarIndice(Vetor *vetor, int indice)
 
 void deletarPorNome(Vetor *vetor, char *nome)
 {
-  int indiceAoSerDeletado = 0;
+  int indiceAoSerDeletado = -1;
   int i;
   for (i = 0; i < vetor->size; i++)
   {
@@ -207,7 +209,7 @@ void deletarPorNome(Vetor *vetor, char *nome)
     }
   }
 
-  if (indiceAoSerDeletado == 0)
+  if (indiceAoSerDeletado == -1)
   {
     printf("Nome não Encontrado!\n");
   }
@@ -227,7 +229,7 @@ void atualizarIndice(Vetor *vetor, int indice, Pessoa p)
 
 void atualizarPorNome(Vetor *vetor, Pessoa p, char *nome)
 {
-  int indiceAoSerAlterado = 0;
+  int indiceAoSerAlterado = -1;
   int i;
   for (i = 0; i < vetor->size; i++)
   {
@@ -239,8 +241,13 @@ void atualizarPorNome(Vetor *vetor, Pessoa p, char *nome)
     }
   }
 
-  if (indiceAoSerAlterado == 0)
+  if (indiceAoSerAlterado == -1)
   {
     printf("Nome não Encontrado!\n");
   }
+}
+
+void liberarMemoria(Vetor *vetor)
+{
+  free(vetor->pessoas);
 }
