@@ -29,7 +29,7 @@ int main()
   inserirFim(&lista, 2);
   inserirFim(&lista, 4);
   inserirFim(&lista, 6);
-  inserirOrdenado(&lista, 7);
+  inserirOrdenado(&lista, 12);
   listar(&lista);
 
   return 0;
@@ -157,15 +157,8 @@ void inserirOrdenado(t_lista *lista, int valor)
         break;
       atual = atual->prox;
     }
-    if (atual == lista->ultimo)
-    {
-      inserirFim(lista, valor);
-    }
-    else
-    {
-      novo_no->prox = atual->prox;
-      atual->prox = novo_no;
-      lista->size++;
-    }
+    novo_no->prox = atual->prox;
+    atual->prox = novo_no;
+    lista->size++;
   }
 }
