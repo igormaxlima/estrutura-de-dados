@@ -26,7 +26,10 @@ void deletarFim(t_lista *lista);
 int main()
 {
   t_lista lista = inicializarLista();
-  inserirInicio(&lista, 2);
+  inserirFim(&lista, 2);
+  inserirFim(&lista, 4);
+  inserirFim(&lista, 6);
+  inserirOrdenado(&lista, 7);
   listar(&lista);
 
   return 0;
@@ -119,5 +122,50 @@ void inserirInicio(t_lista *lista, int valor)
     novo_no->prox = lista->primeiro;
     lista->primeiro = novo_no;
     lista->size++;
+  }
+}
+
+void inserirOrdenado(t_lista *lista, int valor)
+{
+  if (!lista)
+  {
+    fprintf(stderr, "Lista inválida!\n");
+    return;
+  }
+
+  t_no *novo_no = criarNo(valor);
+  if (!novo_no)
+  {
+    fprintf(stderr, "Novo Nó nao criado com sucesso!\n");
+    return;
+  }
+
+  if (!lista->primeiro)
+  {
+    inserirEmListaVazia(lista, novo_no);
+  }
+  else if (novo_no->valor < lista->primeiro->valor)
+  {
+    inserirInicio(lista, valor);
+  }
+  else
+  {
+    t_no *atual = lista->primeiro;
+    while (atual->prox)
+    {
+      if (novo_no->valor < atual->prox->valor)
+        break;
+      atual = atual->prox;
+    }
+    if (atual == lista->ultimo)
+    {
+      inserirFim(lista, valor);
+    }
+    else
+    {
+      novo_no->prox = atual->prox;
+      atual->prox = novo_no;
+      lista->size++;
+    }
   }
 }
