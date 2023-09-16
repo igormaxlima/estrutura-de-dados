@@ -26,11 +26,7 @@ void deletarFim(t_lista *lista);
 int main()
 {
   t_lista lista = inicializarLista();
-  inserirFim(&lista, 5);
-  inserirFim(&lista, 10);
-  inserirInicio(&lista, 10);
   inserirInicio(&lista, 2);
-
   listar(&lista);
 
   return 0;
@@ -61,17 +57,35 @@ void listar(t_lista *lista)
     printf("(%d)->", aux->valor);
     aux = aux->prox;
   }
-  printf("\nSize: %d\n", lista->size);
+  printf("NULL\n");
+  printf("Size: %d\n", lista->size);
+}
+
+void inserirEmListaVazia(t_lista *lista, t_no *novo_no)
+{
+  lista->primeiro = novo_no;
+  lista->ultimo = novo_no;
+  lista->size++;
 }
 
 void inserirFim(t_lista *lista, int valor)
 {
+  if (!lista)
+  {
+    fprintf(stderr, "Lista inválida!\n");
+    return;
+  }
+
   t_no *novo_no = criarNo(valor);
+  if (!novo_no)
+  {
+    fprintf(stderr, "Novo Nó nao criado com sucesso!\n");
+    return;
+  }
+
   if (!lista->primeiro)
   {
-    lista->primeiro = novo_no;
-    lista->ultimo = novo_no;
-    lista->size++;
+    inserirEmListaVazia(lista, novo_no);
   }
   else
   {
@@ -83,12 +97,22 @@ void inserirFim(t_lista *lista, int valor)
 
 void inserirInicio(t_lista *lista, int valor)
 {
+  if (!lista)
+  {
+    fprintf(stderr, "Lista inválida!\n");
+    return;
+  }
+
   t_no *novo_no = criarNo(valor);
+  if (!novo_no)
+  {
+    fprintf(stderr, "Novo Nó nao criado com sucesso!\n");
+    return;
+  }
+
   if (!lista->primeiro)
   {
-    lista->primeiro = novo_no;
-    lista->ultimo = novo_no;
-    lista->size++;
+    inserirEmListaVazia(lista, novo_no);
   }
   else
   {
