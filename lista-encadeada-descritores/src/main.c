@@ -17,12 +17,12 @@ typedef struct
 t_lista inicializarLista();
 t_no *criarNo(int valor);
 void listar(t_lista *lista);
+void liberarMemoria(t_lista *lista);
 void inserirInicio(t_lista *lista, int valor);
 void inserirFim(t_lista *lista, int valor);
 void inserirOrdenado(t_lista *lista, int valor);
 void deletarInicio(t_lista *lista);
 void deletarFim(t_lista *lista);
-void liberarMemoria(t_lista *lista);
 
 int main()
 {
