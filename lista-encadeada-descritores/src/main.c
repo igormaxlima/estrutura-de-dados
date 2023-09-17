@@ -29,7 +29,11 @@ int main()
   inserirFim(&lista, 2);
   inserirFim(&lista, 4);
   inserirFim(&lista, 6);
-  inserirOrdenado(&lista, 12);
+  inserirOrdenado(&lista, 10);
+  deletarFim(&lista);
+  deletarFim(&lista);
+  deletarFim(&lista);
+
   listar(&lista);
 
   return 0;
@@ -148,6 +152,10 @@ void inserirOrdenado(t_lista *lista, int valor)
   {
     inserirInicio(lista, valor);
   }
+  else if (novo_no->valor > lista->ultimo->valor)
+  {
+    inserirFim(lista, valor);
+  }
   else
   {
     t_no *atual = lista->primeiro;
@@ -160,5 +168,59 @@ void inserirOrdenado(t_lista *lista, int valor)
     novo_no->prox = atual->prox;
     atual->prox = novo_no;
     lista->size++;
+  }
+}
+
+void deletarInicio(t_lista *lista)
+{
+  if (!lista)
+  {
+    fprintf(stderr, "Lista inválida!\n");
+    return;
+  }
+
+  if (!lista->primeiro)
+  {
+    printf("Lista vazia!\n");
+    return;
+  }
+
+  t_no *aux = lista->primeiro->prox;
+  free(lista->primeiro);
+  lista->primeiro = aux;
+  lista->size--;
+}
+
+void deletarFim(t_lista *lista)
+{
+  if (!lista)
+  {
+    fprintf(stderr, "Lista inválida!\n");
+    return;
+  }
+
+  if (!lista->primeiro)
+  {
+    printf("Lista vazia!\n");
+    return;
+  }
+
+  if (!lista->primeiro->prox)
+  {
+    free(lista->primeiro);
+    lista->primeiro = NULL;
+    lista->size--;
+  }
+  else
+  {
+    t_no *aux = lista->primeiro;
+    while (aux->prox != lista->ultimo)
+    {
+      aux = aux->prox;
+    }
+    free(lista->ultimo);
+    aux->prox = NULL;
+    lista->ultimo = aux;
+    lista->size--;
   }
 }
